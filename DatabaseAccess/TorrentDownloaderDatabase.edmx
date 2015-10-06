@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TorrentDownloaderDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="TorrentDownloaderDBModelStoreContainer">
+    <EntitySet Name="Shows" EntityType="TorrentDownloaderDBModel.Store.Shows" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Episodes" EntityType="TorrentDownloaderDBModel.Store.Episodes" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ShowEpisode" Association="TorrentDownloaderDBModel.Store.ShowEpisode">
+      <End Role="Show" EntitySet="Shows" />
+      <End Role="Episode" EntitySet="Episodes" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Shows">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="prettyName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="genre" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="link" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Episodes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="torrentFile720" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="torrentFile1080" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="torrentFileHD" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="num" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="title" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="age" Type="int" Nullable="true" />
+    <Property Name="Downloaded" Type="bit" Nullable="false" DefaultValue="false" />
+    <Property Name="Show_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ShowEpisode">
+    <End Role="Show" Type="TorrentDownloaderDBModel.Store.Shows" Multiplicity="1" />
+    <End Role="Episode" Type="TorrentDownloaderDBModel.Store.Episodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Show">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Episode">
+        <PropertyRef Name="Show_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TorrentDownloaderDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="TorrentDownloaderEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Shows" EntityType="TorrentDownloaderDBModel.Show" />
+          <EntitySet Name="Episodes" EntityType="TorrentDownloaderDBModel.Episode" />
+          <AssociationSet Name="ShowEpisode" Association="TorrentDownloaderDBModel.ShowEpisode">
+            <End Role="Show" EntitySet="Shows" />
+            <End Role="Episode" EntitySet="Episodes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Show">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="name" Nullable="true" />
+          <Property Type="String" Name="prettyName" Nullable="true" />
+          <Property Type="String" Name="genre" Nullable="true" />
+          <Property Type="String" Name="link" Nullable="true" />
+          <NavigationProperty Name="Episodes" Relationship="TorrentDownloaderDBModel.ShowEpisode" FromRole="Show" ToRole="Episode" />
+        </EntityType>
+        <EntityType Name="Episode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="torrentFile720" Nullable="true" />
+          <Property Type="String" Name="torrentFile1080" Nullable="true" />
+          <Property Type="String" Name="torrentFileHD" Nullable="true" />
+          <Property Type="String" Name="num" Nullable="true" />
+          <Property Type="String" Name="title" Nullable="true" />
+          <Property Type="Int32" Name="age" Nullable="true" />
+          <NavigationProperty Name="Show" Relationship="TorrentDownloaderDBModel.ShowEpisode" FromRole="Episode" ToRole="Show" />
+          <Property Type="Boolean" Name="Downloaded" Nullable="false" DefaultValue="false" />
+        </EntityType>
+        <Association Name="ShowEpisode">
+          <End Type="TorrentDownloaderDBModel.Show" Role="Show" Multiplicity="1" />
+          <End Type="TorrentDownloaderDBModel.Episode" Role="Episode" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TorrentDownloaderDBModelStoreContainer" CdmEntityContainer="TorrentDownloaderEntities">
+    <EntitySetMapping Name="Shows">
+      <EntityTypeMapping TypeName="IsTypeOf(TorrentDownloaderDBModel.Show)">
+        <MappingFragment StoreEntitySet="Shows">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="prettyName" ColumnName="prettyName" />
+          <ScalarProperty Name="genre" ColumnName="genre" />
+          <ScalarProperty Name="link" ColumnName="link" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Episodes">
+      <EntityTypeMapping TypeName="IsTypeOf(TorrentDownloaderDBModel.Episode)">
+        <MappingFragment StoreEntitySet="Episodes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="torrentFile720" ColumnName="torrentFile720" />
+          <ScalarProperty Name="torrentFile1080" ColumnName="torrentFile1080" />
+          <ScalarProperty Name="torrentFileHD" ColumnName="torrentFileHD" />
+          <ScalarProperty Name="num" ColumnName="num" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="age" ColumnName="age" />
+          <ScalarProperty Name="Downloaded" ColumnName="Downloaded" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ShowEpisode" TypeName="TorrentDownloaderDBModel.ShowEpisode" StoreEntitySet="Episodes">
+      <EndProperty Name="Show">
+        <ScalarProperty Name="Id" ColumnName="Show_Id" />
+      </EndProperty>
+      <EndProperty Name="Episode">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="TorrentDownloaderDatabase" >
+        <EntityTypeShape EntityType="TorrentDownloaderDBModel.Show" Width="1.5" PointX="3.25" PointY="1.125" Height="2.172587890625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TorrentDownloaderDBModel.Episode" Width="1.5" PointX="5.75" PointY="0.875" Height="2.7494921874999996" />
+        <AssociationConnector Association="TorrentDownloaderDBModel.ShowEpisode">
+          <ConnectorPoint PointX="4.75" PointY="2.2112939453125" />
+          <ConnectorPoint PointX="5.75" PointY="2.2112939453125" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
